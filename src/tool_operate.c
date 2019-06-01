@@ -1034,6 +1034,7 @@ static CURLcode operate_do(struct GlobalConfig *global,
           my_setopt(curl, CURLOPT_RESUME_FROM_LARGE, CURL_OFF_T_C(0));
 
         my_setopt_str(curl, CURLOPT_KEYPASSWD, config->key_passwd);
+		my_setopt_str(curl, CURLOPT_DKEYPASSWD, config->dkey_passwd);
 #ifndef CURL_DISABLE_PROXY
         my_setopt_str(curl, CURLOPT_PROXY_KEYPASSWD, config->proxy_key_passwd);
 #endif
@@ -1107,6 +1108,13 @@ static CURLcode operate_do(struct GlobalConfig *global,
               }
             }
           }
+          if(config->dcert) {
+            if(!config->dcert_type) {
+              if(is_pkcs11_uri(config->dcert)) {
+                config->dcert_type = strdup("ENG");
+              }
+            }
+          }
 
           /* Check if config->key is a PKCS#11 URI and set the
            * config->key_type if necessary */
@@ -1114,6 +1122,13 @@ static CURLcode operate_do(struct GlobalConfig *global,
             if(!config->key_type) {
               if(is_pkcs11_uri(config->key)) {
                 config->key_type = strdup("ENG");
+              }
+            }
+          }
+          if(config->dkey) {
+            if(!config->dkey_type) {
+              if(is_pkcs11_uri(config->dkey)) {
+                config->dkey_type = strdup("ENG");
               }
             }
           }
@@ -1139,13 +1154,17 @@ static CURLcode operate_do(struct GlobalConfig *global,
           }
 
           my_setopt_str(curl, CURLOPT_SSLCERT, config->cert);
+          my_setopt_str(curl, CURLOPT_SSLDCERT, config->dcert);
           my_setopt_str(curl, CURLOPT_PROXY_SSLCERT, config->proxy_cert);
           my_setopt_str(curl, CURLOPT_SSLCERTTYPE, config->cert_type);
+          my_setopt_str(curl, CURLOPT_SSLDCERTTYPE, config->dcert_type);
           my_setopt_str(curl, CURLOPT_PROXY_SSLCERTTYPE,
                         config->proxy_cert_type);
           my_setopt_str(curl, CURLOPT_SSLKEY, config->key);
+          my_setopt_str(curl, CURLOPT_SSLDKEY, config->dkey);
           my_setopt_str(curl, CURLOPT_PROXY_SSLKEY, config->proxy_key);
           my_setopt_str(curl, CURLOPT_SSLKEYTYPE, config->key_type);
+          my_setopt_str(curl, CURLOPT_SSLDKEYTYPE, config->dkey_type);
           my_setopt_str(curl, CURLOPT_PROXY_SSLKEYTYPE,
                         config->proxy_key_type);
 

@@ -205,6 +205,7 @@ static const struct LongShort aliases[]= {
   {"11",  "tlsv1.1",                 ARG_NONE},
   {"12",  "tlsv1.2",                 ARG_NONE},
   {"13",  "tlsv1.3",                 ARG_NONE},
+  {"14",  "gmtls"  ,                 ARG_NONE},
   {"1A", "tls13-ciphers",            ARG_STRING},
   {"1B", "proxy-tls13-ciphers",      ARG_STRING},
   {"2",  "sslv2",                    ARG_NONE},
@@ -265,6 +266,15 @@ static const struct LongShort aliases[]= {
   {"E9", "proxy-tlsv1",              ARG_NONE},
   {"EA", "socks5-basic",             ARG_BOOL},
   {"EB", "socks5-gssapi",            ARG_BOOL},
+
+#ifndef OPENSSL_NO_GMTLS
+  {"EE", "dcert",                    ARG_FILENAME},
+  {"EF", "dcert-type",               ARG_STRING},
+  {"EG", "dkey",                     ARG_FILENAME},
+  {"EH", "dkey-type",                ARG_STRING},
+  {"EI", "dpass",                    ARG_STRING},
+#endif
+
   {"f",  "fail",                     ARG_BOOL},
   {"fa", "fail-early",               ARG_BOOL},
   {"fb", "styled-output",            ARG_BOOL},
@@ -1218,6 +1228,10 @@ ParameterError getparameter(const char *flag, /* f or -long-flag */
         /* TLS version 1.3 */
         config->ssl_version = CURL_SSLVERSION_TLSv1_3;
         break;
+      case '4':
+        /* GMTLS */
+        config->ssl_version = CURL_SSLVERSION_GMTLS;
+        break;
       case 'A': /* --tls13-ciphers */
         GetStr(&config->cipher13_list, nextarg);
         break;
@@ -1681,7 +1695,24 @@ ParameterError getparameter(const char *flag, /* f or -long-flag */
         else
           config->socks5_auth &= ~CURLAUTH_GSSAPI;
         break;
-
+#ifndef OPENSSL_NO_GMTLS
+      case 'E': /* dcertificate file */
+        GetFileAndPassword(nextarg, &config->dcert, &config->dkey_passwd);
+        break;
+      case 'F': /* dcert file type */
+        GetStr(&config->dcert_type, nextarg);
+        break;
+      case 'G': /* private dkey file */
+        GetStr(&config->dkey, nextarg);
+        break;
+      case 'H': /* private dkey file type */
+        GetStr(&config->dkey_type, nextarg);
+        break;
+      case 'I': /* private key passphrase */
+        GetStr(&config->dkey_passwd, nextarg);
+        cleanarg(nextarg);
+        break;
+#endif
       default: /* unknown flag */
         return PARAM_OPTION_UNKNOWN;
       }

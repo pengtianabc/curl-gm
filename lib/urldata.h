@@ -239,6 +239,13 @@ struct ssl_config_data {
   char *key; /* private key file name */
   char *key_type; /* format for private key (default: PEM) */
   char *key_passwd; /* plain text private key password */
+#ifndef OPENSSL_NO_GMTLS
+  char *dcert; /* client certificate file name */
+  char *dcert_type; /* format for certificate (default: PEM)*/
+  char *dkey; /* private key file name */
+  char *dkey_type; /* format for private key (default: PEM) */
+  char *dkey_passwd; /* plain text private key password */
+#endif
 #ifdef USE_TLS_SRP
   char *username; /* TLS username (for, e.g., SRP) */
   char *password; /* TLS password (for, e.g., SRP) */
@@ -1412,8 +1419,10 @@ struct Curl_multi;    /* declared and used only in multi.c */
 
 enum dupstring {
   STRING_CERT_ORIG,       /* client certificate file name */
+  STRING_DCERT_ORIG,      /* client 2th certificate file name */
   STRING_CERT_PROXY,      /* client certificate file name */
   STRING_CERT_TYPE_ORIG,  /* format for certificate (default: PEM)*/
+  STRING_DCERT_TYPE_ORIG, /* format for 2th certificate (default: PEM)*/
   STRING_CERT_TYPE_PROXY, /* format for certificate (default: PEM)*/
   STRING_COOKIE,          /* HTTP cookie string to send */
   STRING_COOKIEJAR,       /* dump all cookies to this file */
@@ -1425,10 +1434,13 @@ enum dupstring {
   STRING_FTP_ALTERNATIVE_TO_USER, /* command to send if USER/PASS fails */
   STRING_FTPPORT,         /* port to send with the FTP PORT command */
   STRING_KEY_ORIG,        /* private key file name */
+  STRING_DKEY_ORIG,       /* private 2th key file name */
   STRING_KEY_PROXY,       /* private key file name */
   STRING_KEY_PASSWD_ORIG, /* plain text private key password */
+  STRING_DKEY_PASSWD_ORIG,/* plain text 2th private key password */
   STRING_KEY_PASSWD_PROXY, /* plain text private key password */
   STRING_KEY_TYPE_ORIG,   /* format for private key (default: PEM) */
+  STRING_DKEY_TYPE_ORIG,   /* format for 2th private key (default: PEM) */
   STRING_KEY_TYPE_PROXY,  /* format for private key (default: PEM) */
   STRING_KRB_LEVEL,       /* krb security level */
   STRING_NETRC_FILE,      /* if not NULL, use this instead of trying to find

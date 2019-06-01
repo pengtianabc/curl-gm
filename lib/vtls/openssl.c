@@ -1982,6 +1982,11 @@ static void ssl_tls_trace(int direction, int ssl_ver, int content_type,
     verstr = "TLSv1.3";
     break;
 #endif
+#ifdef GMTLS_VERSION
+  case GMTLS_VERSION:
+    verstr = "GMTLS";
+#endif
+    break;
   case 0:
     break;
   default:
@@ -2315,6 +2320,8 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
 #endif
   char * const ssl_cert = SSL_SET_OPTION(cert);
   const char * const ssl_cert_type = SSL_SET_OPTION(cert_type);
+  char * const ssl_dcert = SSL_SET_OPTION(dcert);
+  const char * const ssl_dcert_type = SSL_SET_OPTION(dcert_type);
   const char * const ssl_cafile = SSL_CONN_CONFIG(CAfile);
   const char * const ssl_capath = SSL_CONN_CONFIG(CApath);
   const bool verifypeer = SSL_CONN_CONFIG(verifypeer);
@@ -2373,8 +2380,20 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
     use_sni(FALSE);
     break;
 #endif
+  case CURL_SSLVERSION_GMTLS:
+
+#ifdef OPENSSL_NO_GMTLS
+    failf(data, OSSL_PACKAGE " was built without GMTLS support");
+    return CURLE_NOT_BUILT_IN;
+#else
+    req_method = GMTLS_client_method();
+#endif
+    infof(data, "using gmtls\n");
+    use_sni(FALSE);
+    break;
+
   default:
-    failf(data, "Unrecognized parameter passed via CURLOPT_SSLVERSION");
+    failf(data, "Unrecognized parameter passed via CURLOPT_SSLVERSION [%s]", __FUNCTION__);
     return CURLE_SSL_CONNECT_ERROR;
   }
 
@@ -2477,6 +2496,7 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
   case CURL_SSLVERSION_TLSv1_1:
   case CURL_SSLVERSION_TLSv1_2:
   case CURL_SSLVERSION_TLSv1_3:
+  case CURL_SSLVERSION_GMTLS:
     /* asking for any TLS version as the minimum, means no SSL versions
        allowed */
     ctx_options |= SSL_OP_NO_SSLv2;
@@ -2499,7 +2519,7 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
     break;
 
   default:
-    failf(data, "Unrecognized parameter passed via CURLOPT_SSLVERSION");
+    failf(data, "Unrecognized parameter passed via CURLOPT_SSLVERSION [%s]", __FUNCTION__);
     return CURLE_SSL_CONNECT_ERROR;
   }
 
@@ -2540,11 +2560,21 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
 #endif
 
   if(ssl_cert || ssl_cert_type) {
+  	infof(data, "[DEBUG]setting 1st cert\n");
     if(!cert_stuff(conn, BACKEND->ctx, ssl_cert, ssl_cert_type,
                    SSL_SET_OPTION(key), SSL_SET_OPTION(key_type),
                    SSL_SET_OPTION(key_passwd))) {
       /* failf() is already done in cert_stuff() */
       return CURLE_SSL_CERTPROBLEM;
+    }
+  }
+  if(ssl_dcert || ssl_dcert_type) {
+  	infof(data, "[DEBUG]setting 2th cert\n");
+    if(!cert_stuff(conn, BACKEND->ctx, ssl_dcert, ssl_dcert_type,
+                  SSL_SET_OPTION(dkey), SSL_SET_OPTION(dkey_type),
+                  SSL_SET_OPTION(dkey_passwd))) {
+     /* failf() is already done in cert_stuff() */
+     return CURLE_SSL_CERTPROBLEM;
     }
   }
 

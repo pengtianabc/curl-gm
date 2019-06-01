@@ -276,6 +276,7 @@ _CURL_WARNING(_curl_easy_getinfo_err_curl_off_t,
    (option) == CURLOPT_INTERFACE ||                                           \
    (option) == CURLOPT_ISSUERCERT ||                                          \
    (option) == CURLOPT_KEYPASSWD ||                                           \
+   (option) == CURLOPT_DKEYPASSWD ||                                          \
    (option) == CURLOPT_KRBLEVEL ||                                            \
    (option) == CURLOPT_LOGIN_OPTIONS ||                                       \
    (option) == CURLOPT_MAIL_AUTH ||                                           \
@@ -317,9 +318,13 @@ _CURL_WARNING(_curl_easy_getinfo_err_curl_off_t,
    (option) == CURLOPT_SSH_PUBLIC_KEYFILE ||                                  \
    (option) == CURLOPT_SSLCERT ||                                             \
    (option) == CURLOPT_SSLCERTTYPE ||                                         \
+   (option) == CURLOPT_SSLDCERT ||                                            \
+   (option) == CURLOPT_SSLDCERTTYPE ||                                        \
    (option) == CURLOPT_SSLENGINE ||                                           \
    (option) == CURLOPT_SSLKEY ||                                              \
    (option) == CURLOPT_SSLKEYTYPE ||                                          \
+   (option) == CURLOPT_SSLDKEY ||                                             \
+   (option) == CURLOPT_SSLDKEYTYPE ||                                         \
    (option) == CURLOPT_SSL_CIPHER_LIST ||                                     \
    (option) == CURLOPT_TLSAUTH_PASSWORD ||                                    \
    (option) == CURLOPT_TLSAUTH_TYPE ||                                        \

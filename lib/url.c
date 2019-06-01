@@ -3637,14 +3637,19 @@ static CURLcode create_conn(struct Curl_easy *data,
   data->set.ssl.issuercert = data->set.str[STRING_SSL_ISSUERCERT_ORIG];
   data->set.proxy_ssl.issuercert = data->set.str[STRING_SSL_ISSUERCERT_PROXY];
   data->set.ssl.cert = data->set.str[STRING_CERT_ORIG];
+  data->set.ssl.dcert = data->set.str[STRING_DCERT_ORIG];
   data->set.proxy_ssl.cert = data->set.str[STRING_CERT_PROXY];
   data->set.ssl.cert_type = data->set.str[STRING_CERT_TYPE_ORIG];
+  data->set.ssl.dcert_type = data->set.str[STRING_DCERT_TYPE_ORIG];
   data->set.proxy_ssl.cert_type = data->set.str[STRING_CERT_TYPE_PROXY];
   data->set.ssl.key = data->set.str[STRING_KEY_ORIG];
+  data->set.ssl.dkey = data->set.str[STRING_DKEY_ORIG];
   data->set.proxy_ssl.key = data->set.str[STRING_KEY_PROXY];
   data->set.ssl.key_type = data->set.str[STRING_KEY_TYPE_ORIG];
+  data->set.ssl.dkey_type = data->set.str[STRING_DKEY_TYPE_ORIG];
   data->set.proxy_ssl.key_type = data->set.str[STRING_KEY_TYPE_PROXY];
   data->set.ssl.key_passwd = data->set.str[STRING_KEY_PASSWD_ORIG];
+  data->set.ssl.dkey_passwd = data->set.str[STRING_DKEY_PASSWD_ORIG];
   data->set.proxy_ssl.key_passwd = data->set.str[STRING_KEY_PASSWD_PROXY];
   data->set.ssl.primary.clientcert = data->set.str[STRING_CERT_ORIG];
   data->set.proxy_ssl.primary.clientcert = data->set.str[STRING_CERT_PROXY];
@@ -3654,6 +3659,8 @@ static CURLcode create_conn(struct Curl_easy *data,
   data->set.ssl.password = data->set.str[STRING_TLSAUTH_PASSWORD_ORIG];
   data->set.proxy_ssl.password = data->set.str[STRING_TLSAUTH_PASSWORD_PROXY];
 #endif
+  infof(data, "[DEBUG] data ssl_cert:%s\n", data->set.ssl.cert);
+  infof(data, "[DEBUG] data ssl_dcert:%s\n", data->set.ssl.dcert);
 
   if(!Curl_clone_primary_ssl_config(&data->set.ssl.primary,
      &conn->ssl_config)) {

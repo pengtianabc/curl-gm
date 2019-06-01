@@ -106,9 +106,10 @@ int main(void)
 
       /* sorry, for engine we must set the passphrase
          (if the key has one...) */
-      if(pPassphrase)
+      if(pPassphrase){
         curl_easy_setopt(curl, CURLOPT_KEYPASSWD, pPassphrase);
-
+		curl_easy_setopt(curl, CURLOPT_DKEYPASSWD, pPassphrase);
+      }
       /* if we use a key stored in a crypto engine,
          we must set the key type to "ENG" */
       curl_easy_setopt(curl, CURLOPT_SSLKEYTYPE, pKeyType);

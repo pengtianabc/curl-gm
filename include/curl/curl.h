@@ -1921,6 +1921,23 @@ typedef enum {
   /* maximum age of a connection to consider it for reuse (in seconds) */
   CINIT(MAXAGE_CONN, LONG, 288),
 
+  /* name of the file keeping your private SSL-certificate */
+  CINIT(SSLDCERT, STRINGPOINT, 289),
+
+  /* password for the SSL or SSH private key */
+  CINIT(DKEYPASSWD, STRINGPOINT, 290),
+
+
+  /* type of the file keeping your SSL-certificate ("DER", "PEM", "ENG") */
+  CINIT(SSLDCERTTYPE, STRINGPOINT, 291),
+
+  /* name of the file keeping your private SSL-key */
+  CINIT(SSLDKEY, STRINGPOINT, 292),
+
+  /* type of the file keeping your private SSL-key ("DER", "PEM", "ENG") */
+  CINIT(SSLDKEYTYPE, STRINGPOINT, 293),
+
+
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;
 
@@ -1937,6 +1954,8 @@ typedef enum {
 
 /* The following were added in 7.17.0 */
 #define CURLOPT_SSLKEYPASSWD CURLOPT_KEYPASSWD
+#define CURLOPT_SSLDKEYPASSWD CURLOPT_DKEYPASSWD
+
 #define CURLOPT_FTPAPPEND CURLOPT_APPEND
 #define CURLOPT_FTPLISTONLY CURLOPT_DIRLISTONLY
 #define CURLOPT_FTP_SSL CURLOPT_USE_SSL
@@ -1944,6 +1963,7 @@ typedef enum {
 /* The following were added earlier */
 
 #define CURLOPT_SSLCERTPASSWD CURLOPT_KEYPASSWD
+#define CURLOPT_SSLDCERTPASSWD CURLOPT_DKEYPASSWD
 #define CURLOPT_KRB4LEVEL CURLOPT_KRBLEVEL
 
 #else
@@ -2023,7 +2043,7 @@ enum {
   CURL_SSLVERSION_TLSv1_1,
   CURL_SSLVERSION_TLSv1_2,
   CURL_SSLVERSION_TLSv1_3,
-
+  CURL_SSLVERSION_GMTLS,
   CURL_SSLVERSION_LAST /* never use, keep last */
 };
 
@@ -2034,7 +2054,7 @@ enum {
   CURL_SSLVERSION_MAX_TLSv1_1 =  (CURL_SSLVERSION_TLSv1_1 << 16),
   CURL_SSLVERSION_MAX_TLSv1_2 =  (CURL_SSLVERSION_TLSv1_2 << 16),
   CURL_SSLVERSION_MAX_TLSv1_3 =  (CURL_SSLVERSION_TLSv1_3 << 16),
-
+  CURL_SSLVERSION_MAX_GMTLS   =  (CURL_SSLVERSION_GMTLS   << 16),
   /* never use, keep last */
   CURL_SSLVERSION_MAX_LAST =     (CURL_SSLVERSION_LAST    << 16)
 };

@@ -188,6 +188,8 @@ int main(void)
   rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, writefunction);
   rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
   rv = curl_easy_setopt(ch, CURLOPT_SSLCERTTYPE, "PEM");
+  rv = curl_easy_setopt(ch, CURLOPT_SSLDCERTTYPE, "PEM");
+
 
   /* both VERIFYPEER and VERIFYHOST are set to 0 in this case because there is
      no CA certificate*/

@@ -1598,6 +1598,13 @@ static CURLcode vsetopt(struct Curl_easy *data, CURLoption option,
     result = Curl_setstropt(&data->set.str[STRING_CERT_ORIG],
                             va_arg(param, char *));
     break;
+  case CURLOPT_SSLDCERT:
+    /*
+     * String that holds file name of the SSL certificate to use
+     */
+    result = Curl_setstropt(&data->set.str[STRING_DCERT_ORIG],
+                            va_arg(param, char *));
+    break;
 #ifndef CURL_DISABLE_PROXY
   case CURLOPT_PROXY_SSLCERT:
     /*
@@ -1614,6 +1621,16 @@ static CURLcode vsetopt(struct Curl_easy *data, CURLoption option,
     result = Curl_setstropt(&data->set.str[STRING_CERT_TYPE_ORIG],
                             va_arg(param, char *));
     break;
+
+	case CURLOPT_SSLDCERTTYPE:
+	  /*
+	   * String that holds file type of the SSL certificate to use
+	   */
+	  result = Curl_setstropt(&data->set.str[STRING_DCERT_TYPE_ORIG],
+							  va_arg(param, char *));
+	  break;
+
+
 #ifndef CURL_DISABLE_PROXY
   case CURLOPT_PROXY_SSLCERTTYPE:
     /*
@@ -1628,6 +1645,13 @@ static CURLcode vsetopt(struct Curl_easy *data, CURLoption option,
      * String that holds file name of the SSL key to use
      */
     result = Curl_setstropt(&data->set.str[STRING_KEY_ORIG],
+                            va_arg(param, char *));
+    break;
+  case CURLOPT_SSLDKEY:
+    /*
+     * String that holds file name of the SSL key to use
+     */
+    result = Curl_setstropt(&data->set.str[STRING_DKEY_ORIG],
                             va_arg(param, char *));
     break;
 #ifndef CURL_DISABLE_PROXY
@@ -1646,6 +1670,14 @@ static CURLcode vsetopt(struct Curl_easy *data, CURLoption option,
     result = Curl_setstropt(&data->set.str[STRING_KEY_TYPE_ORIG],
                             va_arg(param, char *));
     break;
+  case CURLOPT_SSLDKEYTYPE:
+	  /*
+	   * String that holds file type of the SSL key to use
+	   */
+	  result = Curl_setstropt(&data->set.str[STRING_DKEY_TYPE_ORIG],
+							  va_arg(param, char *));
+	  break;
+
 #ifndef CURL_DISABLE_PROXY
   case CURLOPT_PROXY_SSLKEYTYPE:
     /*
@@ -1660,6 +1692,13 @@ static CURLcode vsetopt(struct Curl_easy *data, CURLoption option,
      * String that holds the SSL or SSH private key password.
      */
     result = Curl_setstropt(&data->set.str[STRING_KEY_PASSWD_ORIG],
+                            va_arg(param, char *));
+	break;
+  case CURLOPT_DKEYPASSWD:
+    /*
+     * String that holds the SSL or SSH private dkey password.
+     */
+    result = Curl_setstropt(&data->set.str[STRING_DKEY_PASSWD_ORIG],
                             va_arg(param, char *));
     break;
 #ifndef CURL_DISABLE_PROXY

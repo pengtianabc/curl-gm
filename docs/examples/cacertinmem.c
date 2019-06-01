@@ -135,6 +135,7 @@ int main(void)
   rv = curl_easy_setopt(ch, CURLOPT_HEADERFUNCTION, *writefunction);
   rv = curl_easy_setopt(ch, CURLOPT_HEADERDATA, stderr);
   rv = curl_easy_setopt(ch, CURLOPT_SSLCERTTYPE, "PEM");
+  rv = curl_easy_setopt(ch, CURLOPT_SSLDCERTTYPE, "PEM");
   rv = curl_easy_setopt(ch, CURLOPT_SSL_VERIFYPEER, 1L);
   rv = curl_easy_setopt(ch, CURLOPT_URL, "https://www.example.com/");
 
